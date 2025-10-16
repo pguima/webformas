@@ -2,19 +2,25 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Usuários</h4>
 
-        <form method="GET" action="{{ route('users.index') }}" class="d-flex">
-            <input type="text" name="q" class="form-control me-2" placeholder="Pesquisar..."
-                value="{{ $query }}">
-            <button class="btn btn-outline-secondary">Buscar</button>
-        </form>
+        <div>
+            <h4>Usuários</h4>
+        </div>
 
-        @if ($isAdmin)
-            <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser">
-                Novo Usuário
-            </button>
-        @endif
+        <div class="d-flex">
+            <form method="GET" action="{{ route('users.index') }}" class="d-flex me-5">
+                <input type="text" name="q" class="form-control form-control-sm me-2" placeholder="Pesquisar..."
+                    value="{{ $query }}">
+                <button class="btn btn-sm btn-outline-secondary">Buscar</button>
+            </form>
+
+            @if ($isAdmin)
+                <button class="btn btn-sm btn-padrao" data-bs-toggle="offcanvas" data-bs-target="#offcanvasUser">
+                    Novo Usuário
+                </button>
+            @endif
+        </div>
+        
     </div>
 
     @if (session('success'))
@@ -24,70 +30,73 @@
         </div>
     @endif
 
-    <table class="table table-hover align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Tipo</th>
-                <th>CPF</th>
-                <th>WhatsApp</th>
-                @if ($isAdmin)
-                    <th class="text-end">Ações</th>
-                @endif
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $u)
+    <div class="card">
+        <table class="table align-middle">
+            <thead>
                 <tr>
-                    <td>{{ $u->name }}</td>
-                    <td>{{ $u->email }}</td>
-                    <td>{{ $u->type }}</td>
-                    <td>{{ $u->cpf }}</td>
-                    <td>{{ $u->whatsapp }}</td>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Tipo</th>
+                    <th>CPF</th>
+                    <th>WhatsApp</th>
                     @if ($isAdmin)
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasUser" data-id="{{ $u->id }}"
-                                data-name="{{ $u->name }}" data-email="{{ $u->email }}"
-                                data-type="{{ $u->type }}" data-cpf="{{ $u->cpf }}"
-                                data-whatsapp="{{ $u->whatsapp }}">
-                                Editar
-                            </button>
+                        <th class="text-end">Ações</th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($users as $u)
+                    <tr>
+                        <td class="text-white fs-6">{{ $u->name }}</td>
+                        <td style="color: #1bb6fd">{{ $u->email }}</td>
+                        <td><span class="badge tag-verde">{{ $u->type }}</span></td>
+                        <td>{{ $u->cpf }}</td>
+                        <td>{{ $u->whatsapp }}</td>
+                        @if ($isAdmin)
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="offcanvas"
+                                    data-bs-target="#offcanvasUser" data-id="{{ $u->id }}"
+                                    data-name="{{ $u->name }}" data-email="{{ $u->email }}"
+                                    data-type="{{ $u->type }}" data-cpf="{{ $u->cpf }}"
+                                    data-whatsapp="{{ $u->whatsapp }}">
+                                    Editar
+                                </button>
 
-                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
-                                data-bs-target="#modalDelete{{ $u->id }}">
-                                Excluir
-                            </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#modalDelete{{ $u->id }}">
+                                    Excluir
+                                </button>
 
-                            <!-- Modal de confirmação -->
-                            <div class="modal fade" id="modalDelete{{ $u->id }}" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Excluir Usuário</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Tem certeza que deseja excluir <strong>{{ $u->name }}</strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form method="POST" action="{{ route('users.destroy', $u->id) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Sim, excluir</button>
-                                            </form>
-                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <!-- Modal de confirmação -->
+                                <div class="modal fade" id="modalDelete{{ $u->id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Excluir Usuário</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Tem certeza que deseja excluir <strong>{{ $u->name }}</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form method="POST" action="{{ route('users.destroy', $u->id) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Sim, excluir</button>
+                                                </form>
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    @endif
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                            </td>
+                        @endif
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
 
     <div>
         {{ $users->links() }}
@@ -138,7 +147,7 @@
                         <input type="text" name="whatsapp" id="whatsapp" class="form-control">
                     </div>
 
-                    <button class="btn btn-success w-100">Salvar</button>
+                    <button class="btn btn-padrao w-100">Salvar</button>
                 </form>
             </div>
         </div>

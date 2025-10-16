@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-primary text-white btn-padrao">
         Perfil de {{ $user->name }}
     </div>
     <div class="card-body">

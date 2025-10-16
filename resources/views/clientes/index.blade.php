@@ -1,40 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-    <h2 class="mb-4">Gerenciamento de Clientes</h2>
+    <div>
+        <h4>Gerenciamento de Clientes</h4>
+    </div>
 
-    <!-- Mensagens de sucesso/erro -->
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <div class="d-flex">
+        <!-- Pesquisa -->
+        <form method="GET" action="{{ route('clientes.index') }}" class="d-flex me-5">
+            <input type="text" name="q" value="{{ request('q') }}" class="form-control form-control-sm me-2" placeholder="Pesquisar cliente...">
+            <button class="btn btn-sm btn-outline-secondary">Buscar</button>
+        </form>
 
-    <!-- Pesquisa -->
-    <form method="GET" action="{{ route('clientes.index') }}" class="mb-3 d-flex">
-        <input type="text" name="q" value="{{ request('q') }}" class="form-control me-2" placeholder="Pesquisar cliente...">
-        <button class="btn btn-primary">Buscar</button>
-    </form>
+        <!-- Botão Criar -->
+        @if($isAdmin)
+            <button class="btn btn-sm btn-padrao" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCreate">
+                Novo Cliente
+            </button>
+        @endif
+    </div>
+</div>
 
-    <!-- Botão Criar -->
-    @if($isAdmin)
-        <button class="btn btn-success mb-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCreate">
-            Novo Cliente
-        </button>
-    @endif
+    
+<!-- Mensagens de sucesso/erro -->
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+    
 
     <!-- Tabela -->
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
+    <div class="card">
+        
             <table class="table table-striped mb-0">
                 <thead>
                     <tr>
@@ -89,9 +96,9 @@
                     @endforelse
                 </tbody>
             </table>
-        </div>
+        
     </div>
-
+<div>
     <!-- Paginação -->
     <div class="mt-3">
         {{ $clientes->links() }}
@@ -102,7 +109,7 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCreate">
     <div class="offcanvas-header">
         <h5>Novo Cliente</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <button type="button" class="" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
         <form method="POST" action="{{ route('clientes.store') }}">
@@ -115,7 +122,7 @@
             <div class="mb-3">
                 <label>Vendedor</label>
                 <select name="vendedor_id" class="form-select" required>
-                    <option value="">Selecione...</option>
+                    <option class="placeholder"></option>
                     @foreach($vendedores as $vendedor)
                         <option value="{{ $vendedor->id }}">{{ $vendedor->name }}</option>
                     @endforeach
@@ -129,12 +136,17 @@
 
             <div class="mb-3">
                 <label>Plataforma</label>
-                <input type="text" name="plataforma" class="form-control">
+                <select name="plataforma" class="form-select">
+                    <option></option>
+                    <option value="HTML">HTML</option>
+                    <option value="Wordpress">Wordpress</option>
+                </select>
             </div>
 
             <div class="mb-3">
                 <label>Serviços</label>
                 <select name="servicos[]" class="form-select" multiple>
+                    <option value="Site">Site</option>
                     <option value="Landing Page">Landing Page</option>
                     <option value="Gestão de Tráfego">Gestão de Tráfego</option>
                     <option value="Social Media">Social Media</option>
@@ -151,6 +163,7 @@
             <div class="mb-3">
                 <label>Status</label>
                 <select name="status" class="form-select">
+                    <option value=""></option>
                     <option value="ativo">Ativo</option>
                     <option value="inativo">Inativo</option>
                     <option value="em análise">Em análise</option>
@@ -159,15 +172,27 @@
 
             <div class="mb-3">
                 <label>Email</label>
-                <input type="text" name="email" class="form-control">
+                <select name="email" class="form-select">
+                    <option></option>
+                    <option value="UOL Pro">UOL Pro</option>
+                    <option value="UOL Premium">UOL Premium</option>
+                    <option value="Externo">Externo</option>
+                    <option value="Google Gsuite">Google Gsuite</option>
+                    <option value="Localweb">Localweb</option>
+                    <option value="Microsoft">Microsoft</option>
+                    <option value="Claranet">Claranet</option>
+                </select>
             </div>
 
             <div class="mb-3">
                 <label>Servidor</label>
-                <input type="text" name="servidor" class="form-control">
+                <select name="servidor" class="form-select">
+                    <option></option>
+                    <option value="Hostinger">Hostinger</option>
+                </select>
             </div>
 
-            <button class="btn btn-primary w-100">Salvar</button>
+            <button class="btn btn-padrao w-100">Salvar</button>
         </form>
     </div>
 </div>

@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-4">
-        <h3 class="text-center mb-3">Login</h3>
+    <div class="col-md-4 row justify-content-center">
+        <img style="width: 170px;" src="{{ Storage::url('images/logo-webformas.webp') }}" alt="Minha Foto">
 
         {{-- Mensagem de sucesso (ex: após logout) --}}
         @if (session('success'))
@@ -40,7 +40,7 @@
                 @enderror
             </div>
 
-            <button class="btn btn-primary w-100">Entrar</button>
+            <button class="btn btn-padrao w-100">Entrar</button>
         </form>
     </div>
 </div>
